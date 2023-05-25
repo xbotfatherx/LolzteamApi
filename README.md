@@ -230,5 +230,3 @@ ____
  * `23` - Cinema
  * `24` - Telegram
  * `25` - YouTube
-
-API Lolzteam by https://lolz.guru/alegor/
