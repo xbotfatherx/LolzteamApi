@@ -1,4 +1,5 @@
 # LOLZTEAM API PYTHON ([сделано на апи](https://github.com/grisha2217/Lolzteam-Public-API/blob/master/docs/market_api.markdown))
+По поводу багов/доработок - https://zelenka.guru/nebotfather/
 ### Init
  * `token` - (__обязательно__) токен api, права *read, post, market*
  * `userid` - userid профиля, необходим для некоторых функций
