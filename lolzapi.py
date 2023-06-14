@@ -7,7 +7,7 @@ class NotSetUserid(Exception):
 
 
 class LolzteamApi:
-    def __init__(self, token: str, userid: int = None, baseUrl="https://api.zelenka.guru/"):
+    def __init__(self, token: str, userid: int = None, baseUrl="https://api.lzt.market/"):
         self.token = token
         self.userid = userid
         self.baseUrl = baseUrl
@@ -37,7 +37,7 @@ class LolzteamApi:
     def market_me(self):
         """Displays info about your profile"""
 
-        return self.get(f'market/me')
+        return self.get(f'me')
 
     def market_add_proxy(self, proxy_ip: str, proxy_port: int, proxy_user: str = None, proxy_pass: str = None,
                          proxy_row: str = None) -> dict:
@@ -60,7 +60,7 @@ class LolzteamApi:
             data['proxy_pass'] = proxy_pass
         if proxy_row:
             data['proxy_row'] = proxy_row
-        return self.post('market/proxy', data=data)
+        return self.post('proxy', data=data)
 
     def market_delete_proxy(self, proxy_id: int = None, delete_all: bool = False) -> dict:
         """Delete single or all proxies
@@ -76,10 +76,10 @@ class LolzteamApi:
             data = {'delete_all': True}
         else:
             raise ValueError('Either proxy_id or delete_all must be specified')
-        return self.delete('market/proxy', data=data)
+        return self.delete('proxy', data=data)
 
     def market_list_proxy(self):
-        return self.get(f'market/proxy')
+        return self.get(f'proxy')
 
     def market_list(self, category: str = None, pmin: int = None, pmax: int = None, title: str = None,
                     parse_sticky_items: str = None, optional: dict = None):
@@ -100,7 +100,7 @@ class LolzteamApi:
             if pmax: data['pmax'] = pmax
             if parse_sticky_items: data['parse_sticky_items'] = parse_sticky_items
             if optional: data = {**data, **optional}
-            return self.get(f'market/{category}', data)
+            return self.get(f'{category}', data)
         else:
             return self.get('market')
 
@@ -129,55 +129,55 @@ class LolzteamApi:
             if pmax: data['pmax'] = pmax
             if showStickyItems: data['showStickyItems'] = showStickyItems
             if optional: data = {**data, **optional}
-            return self.get(f'market/user/{self.userid}/orders/{category}', data)
+            return self.get(f'user/{self.userid}/orders/{category}', data)
         else:
-            return self.get(f'market/user/{self.userid}/orders')
+            return self.get(f'user/{self.userid}/orders')
 
     def market_fave(self):
-        return self.get(f'market/fave')
+        return self.get(f'fave')
 
     def market_add_star(self, item_id: int):
-        return self.post(f'market/{item_id}/star')
+        return self.post(f'{item_id}/star')
 
     def market_delete_star(self, item_id: int):
-        return self.delete(f'market/{item_id}/star')
+        return self.delete(f'{item_id}/star')
 
     def market_stick(self, item_id: int):
-        return self.post(f'market/{item_id}/stick')
+        return self.post(f'{item_id}/stick')
 
     def market_unstick(self, item_id: int):
-        return self.delete(f'market/{item_id}/stick')
+        return self.delete(f'{item_id}/stick')
 
     def market_change_owner(self, item_id: int, username: str, secret_answer: str):
-        return self.post(f'market/{item_id}/change-owner',
+        return self.post(f'{item_id}/change-owner',
                          data={f'username': username, 'secret_answer': secret_answer})
 
     def market_set_tag(self, item_id: int, tag_id: int):
         data = {"tag_id": tag_id}
-        return self.post(f"market/{item_id}/tag", data)
+        return self.post(f"{item_id}/tag", data)
 
     def market_delete_tag(self, item_id: int, tag_id: int):
         data = {"tag_id": tag_id}
-        return self.delete(f"market/{item_id}/tag", data)
+        return self.delete(f"{item_id}/tag", data)
 
     def market_viewed(self):
-        return self.get(f'market/viewed')
+        return self.get(f'viewed')
 
     def market_item(self, item):
-        return self.get(f'market/{item}')
+        return self.get(f'{item}')
 
     def market_reserve(self, item: int):
-        return self.post(f'market/{item}/reserve',
+        return self.post(f'{item}/reserve',
                          data={'price': self.market_item(item)['item']['price']})
 
     def market_cancel_reserve(self, item: int):
-        return self.post(f'market/{item}/cancel-reserve')
+        return self.post(f'{item}/cancel-reserve')
 
     def market_check_account(self, item: int):
-        return self.post(f'market/{item}/check-account')
+        return self.post(f'{item}/check-account')
 
     def market_confirm_buy(self, item: int):
-        return self.post(f'market/{item}/confirm-buy')
+        return self.post(f'{item}/confirm-buy')
 
     def market_fast_buy(self, item_id: int, price: float, buy_without_validation: int = 0):
         """Check and buy account automatic.
@@ -186,7 +186,7 @@ class LolzteamApi:
             price (float) (required) Currenct price of account in your currency
             buy_without_validation (int) Put 1 if you want to buy account without account data validation (not safe)
         """
-        return self.post(f'market/{item_id}/fast-buy',
+        return self.post(f'{item_id}/fast-buy',
                          data={'price': price, 'buy_without_validation': buy_without_validation})
 
     def market_transfer(self, receiver: int, receiver_username: str, amount: int, secret_answer: str,
@@ -203,7 +203,7 @@ class LolzteamApi:
         if transfer_hold: data['transfer_hold'] = transfer_hold
         if hold_length_value: data['hold_length_value'] = hold_length_value
         if hold_length_option: data['hold_length_option'] = hold_length_option
-        return self.post(f'market/balance/transfer', data)
+        return self.post(f'balance/transfer', data)
 
     def market_payments(self, type_: str = None, pmin: int = None, pmax: int = None, receiver: str = None,
                         sender: str = None, startDate: datetime = None, endDate: datetime = None, wallet: str = None,
@@ -240,7 +240,7 @@ class LolzteamApi:
         if wallet: data['wallet'] = wallet
         if comment: data['comment'] = comment
         if is_hold: data['is_hold'] = is_hold
-        return self.get(f'market/user/{self.userid}/payments', data)
+        return self.get(f'user/{self.userid}/payments', data)
 
     def market_category_params(self, category_name: str):
         """Displays search parameters for a category
@@ -248,7 +248,7 @@ class LolzteamApi:
         Args:
             category_name (str): Category name
         """
-        return self.get(f'market/{category_name.lower()}/params')
+        return self.get(f'{category_name.lower()}/params')
 
     def market_category_games(self, category_name: str):
         """Displays a list of games in the category
@@ -256,7 +256,7 @@ class LolzteamApi:
         Args:
             category_name (str): Category name
         """
-        return self.get(f'market/{category_name.lower()}/games')
+        return self.get(f'{category_name.lower()}/games')
 
     def market_add_item(self, title: str, price: int, category_id: int, item_origin: str, extended_guarantee: int,
                         currency: str = 'rub', title_en: str = None, description: str = None, information: str = None,
@@ -296,7 +296,7 @@ class LolzteamApi:
         if email_type: data['email_type'] = email_type
         if allow_ask_discount: data['allow_ask_discount'] = allow_ask_discount
         if proxy_id: data['proxy_id'] = proxy_id
-        return self.post(f'market/item/add', data=data)
+        return self.post(f'item/add', data=data)
 
     def market_add_item_check(self, item: int, login: str = None, password: str = None, login_password: str = None,
                               close_item: bool = None):
@@ -314,22 +314,22 @@ class LolzteamApi:
         if password: data['password'] = password
         if login_password: data['login_password'] = login_password
         if close_item: data['close_item'] = close_item
-        return self.post(f'market/{item}/goods/check', data)
+        return self.post(f'{item}/goods/check', data)
 
     def market_get_email(self, item: int, email: str):
-        return self.get(f'market/{item}/email-code', {'email': email})
+        return self.get(f'{item}/email-code', {'email': email})
 
     def market_refuse_guarantee(self, item: int):
-        return self.post(f'market/{item}/refuse-guarantee')
+        return self.post(f'{item}/refuse-guarantee')
 
     def market_change_password(self, item: int):
-        return self.post(f'market/{item}/change-password')
+        return self.post(f'{item}/change-password')
 
     def market_delete(self, item: int, reason: str):
-        return self.delete(f'market/{item}', {'reason': reason})
+        return self.delete(f'{item}', {'reason': reason})
 
     def market_bump(self, item: int):
-        return self.post(f'market/{item}/bump')
+        return self.post(f'{item}/bump')
 
     def get_temp_email_password(self, item_id: int):
         """Gets password from temp email of account. After calling of this method, the warranty will be cancelled,
@@ -338,7 +338,7 @@ class LolzteamApi:
         Parameters:
             item_id (int): Item id on market
         """
-        return self.get(f'market/{item_id}/temp-email-password')
+        return self.get(f'{item_id}/temp-email-password')
 
     def edit_account_info(self, item_id: int, currency: str = 'rub', key: str = '', value: str = '',
                           key_values=None):
@@ -360,6 +360,5 @@ class LolzteamApi:
         }
         if key: data['key'] = key
         if value: data['value'] = value
-        return self.put(f'market/{item_id}/edit?' + '&'.join(f'key_values[{k}]={v}' for k, v in key_values.items()),
+        return self.put(f'{item_id}/edit?' + '&'.join(f'key_values[{k}]={v}' for k, v in key_values.items()),
                         data=data)
-
